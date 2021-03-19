@@ -25,10 +25,8 @@ app.get("/api/courses/:id", (req, res) => {
 
 app.post("/api/courses", (req, res) => {
   const { error } = validateCourse(req.body); //obj destructuring
-  if (error) {
-    res.status(400).send(result.error.details[0].message);
-    return;
-  }
+  
+  if (error) return res.status(400).send(result.error.details[0].message);
 
   const course = {
     id: courses.length + 1,
@@ -37,19 +35,17 @@ app.post("/api/courses", (req, res) => {
   courses.push(course);
   res.send(course);
 });
+
 app.put("/api/courses/:id", (req, res) => {
   //look up for the course
   //if not existing,return 404
   const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course) res.status(404).send("there is no course with given id ");
+  if (!course) return res.status(404).send("there is no course with given id ");
   //validate
   //if invalid, return 400 - bad request
 
   const { error } = validateCourse(req.body);
-  if (error) {
-    res.status(400).send(result.error.details[0].message);
-    return;
-  }
+  if (error) return res.status(400).send(result.error.details[0].message);
 
   //update course
   course.name = req.body.name;
@@ -67,6 +63,15 @@ function validateCourse(course) {
 /*app.get("/api/posts/:year/:month", (req, res) => {
   res.send(req.params); //route parameters
 });*/
+app.delete("/api/courses/:id", (req, res) => {
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course) return res.status(404).send("there is no course with given id ");
+
+  const index = courses.indexOf(course);
+  courses.splice(index, 1);
+
+  res.send(course);
+});
 
 const port = process.env.PORT || 3000;
 
