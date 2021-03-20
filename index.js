@@ -1,8 +1,10 @@
-const Joi = require("Joi");// schema description language and data validator
+const Joi = require("Joi"); // schema description language and data validator
 const express = require("express");
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 const courses = [
   { id: 1, name: "course1" },
@@ -25,7 +27,7 @@ app.get("/api/courses/:id", (req, res) => {
 
 app.post("/api/courses", (req, res) => {
   const { error } = validateCourse(req.body); //obj destructuring
-   
+
   if (error) return res.status(400).send(result.error.details[0].message);
 
   const course = {
