@@ -1,10 +1,20 @@
 const Joi = require("Joi"); // schema description language and data validator
+const helmet = require("helmet");
 const express = require("express");
 const app = express();
+const morgan = require("morgan"); //log the http request
+
+console.log(`environment:${app.get("env")}`);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static("public")); //read static file
+app.use(helmet());
+
+if (app.get("env") === "development") {
+  app.use(morgan("tiny"));
+  console.log("morgan enabled");
+}
 
 const courses = [
   { id: 1, name: "course1" },
