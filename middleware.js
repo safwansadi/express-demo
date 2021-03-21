@@ -3,12 +3,15 @@ const express = require("express");
 const app = express();
 const logger = require("./logger");
 
+
+
+
 app.use(express.json());
 
-app.use(logger);
+app.use(logger); //custom middleware function 
 
 app.get("/", (req, res) => {
-  res.send("hello world");
+  res.send("hello world");  
 });
 
 const port = process.env.PORT || 3000;

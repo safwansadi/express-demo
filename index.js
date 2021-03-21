@@ -4,6 +4,8 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan"); //log the http request
 const config = require("config");
+const startupDebugger = require("debug")("app:startup");
+const dbDebugger = require("debug")("app:db");
 
 //console.log(`environment:${app.get("env")}`);
 
@@ -18,8 +20,12 @@ console.log("Mail Server: " + config.get("mail.host"));
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
-  console.log("morgan enabled");
+  startupDebugger("morgan enabled");
 }
+
+//Db work
+
+dbDebugger("connected to the databese");
 
 const courses = [
   { id: 1, name: "course1" },
