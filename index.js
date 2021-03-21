@@ -3,13 +3,18 @@ const helmet = require("helmet");
 const express = require("express");
 const app = express();
 const morgan = require("morgan"); //log the http request
+const config = require("config");
 
-console.log(`environment:${app.get("env")}`);
+//console.log(`environment:${app.get("env")}`);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public")); //read static file
 app.use(helmet());
+
+//configuration
+console.log("App Name: " + config.get("name"));
+console.log("Mail Server: " + config.get("mail.host"));
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
